@@ -25,8 +25,7 @@ class Area {
   PVector pos;
   int c1 = int(random(255));
   
-  int randomMin = 5000;
-  int randomMax = 10000;
+  
   long randomStartDelay = (int)random(randomMin, randomMax);
   long time = 0;
   
@@ -59,7 +58,7 @@ class Area {
         time = millis();
       startMovies();
       pause = false;
-      println("unpaused");
+      //println("unpaused");
       }
     }
     
@@ -132,6 +131,10 @@ class Area {
     advancable = true;
   }
   
+  void setDelay(int delay) {
+    randomStartDelay = delay;
+  }
+  
   void advanceArea() {
     if(isFinished) {
       // cycle + reset stuff + loadAssets
@@ -141,7 +144,12 @@ class Area {
       isFinished = false;
       loadMovies();
       pause = true;
-      randomStartDelay = (int)random(randomMin, randomMax);
+      // alte methode
+      //randomStartDelay = (int)random(randomMin, randomMax);
+      
+      // bisschen flotter
+      //if(runParallel) randomStartDelay = (int)random(randomMin, randomMax*1.5);
+      //else randomStartDelay = (int)random(randomMin/2, randomMax/2);
       time = millis();
       println("paused");
     }

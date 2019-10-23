@@ -15,8 +15,11 @@ int combinationIndexNext = 1;
 int currentArea = 0;
 int currentAreaNext = 0;
 
+int randomMin = 4500;
+int randomMax = 6000;
+
 // EXPORT
-boolean export = true;
+boolean export = false;
 long exportCounter = 0;
 
 void setup() {
@@ -61,7 +64,8 @@ void draw() {
     if(!areas.get(i).isFinished()) allFinished = false;  
   }
   
-  if(allFinished) {
+  boolean oldMethod = false;
+  if(allFinished && oldMethod) {
     println("all finished");
     if(combinations.size() <= 0) exit();
     combinationIndex = 0;
@@ -76,10 +80,41 @@ void draw() {
       Area area = areas.get(i);
       area.advanceArea();
     }
+    
+    // veraltet
     int r = (int)random(0, 100);
-    if(r <= 20) runParallel = true;
+    if(r <= 66) runParallel = true;
     else runParallel = false;
-  } 
+    
+  }
+  if(allFinished) {
+    println("ee" + areas.size());
+    String[] currentCombination = split(combinations.get(randomCombination), ",");
+    for(int i = 0; i<areas.size(); i++) {
+       println(i +" => " + currentCombination[i]);
+      //if(int(currentCombination[i]) == i) {
+       
+        Area a = areas.get(int(currentCombination[i]));
+        int randomDelay = (int)random(randomMin*i, randomMax*i);
+        //println("i= " + i + "=>" + randomDelay);
+        /*if(i == 0) {
+          randomDelay = 0;
+          
+        }
+        */
+        println(currentCombination[i] +" => " + randomDelay);
+        a.setDelay(randomDelay);
+      //}
+    }
+    // remove this index
+    combinations.remove(randomCombination);
+    randomCombination = int(random(combinations.size()));
+    
+    for (int i = 0; i < areas.size(); i++) {
+      Area area = areas.get(i);
+      area.advanceArea();
+    }
+  }
     /** play all simultaneously without order */
     /*
     for (int i = 0; i < areas.size(); i++) {
@@ -89,10 +124,14 @@ void draw() {
     }
     */
     
-    String[] currentCombination = split(combinations.get(randomCombination), ",");
+    // nächste zeile ist noch aus der alten ersten methode !!
+    //String[] currentCombination = split(combinations.get(randomCombination), ",");
     // get which area to play
     pg.beginDraw();
     pg.background(0);
+    
+    // begin draw
+    /*
     if(!runParallel) {
       for(int i = 0; i<currentCombination.length; i++) {
         if(int(currentCombination[i]) == combinationIndex) currentArea = i;
@@ -109,7 +148,6 @@ void draw() {
       for(int i = 0; i<currentCombination.length; i++) {
         if(int(currentCombination[i]) == combinationIndexNext) currentAreaNext = i;
       }
-      //println("––––––");
       Area area1 = areas.get(currentArea);
       area1.update();
       area1.display();
@@ -120,13 +158,22 @@ void draw() {
       area2.display();
       if(area2.isFinished()) combinationIndexNext+=2;
     }
+    */
+    // end draw
+    
+    // neue, cleane methode
+    for(int i = 0; i<areas.size(); i++) {
+      Area a = areas.get(i);
+      a.update();
+      a.display();
+    }
     
     pg.endDraw();
     image(pg, 0, 0, width, height);
   
   
   if(export) {
-    pg.save("export_wiggler/"+ exportCounter +".tga"); //saveFrame("export/###.tga");
+    pg.save("exports/191023/"+ exportCounter +".tga"); //saveFrame("export/###.tga");
     exportCounter++;
   }
   
