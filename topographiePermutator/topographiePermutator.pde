@@ -19,12 +19,12 @@ int randomMin = 4500;
 int randomMax = 6000;
 
 // EXPORT
-boolean export = false;
+boolean export = true;
 long exportCounter = 0;
 
 void setup() {
-  //size(3200, 24);
-  size(1920, 14);
+  size(3200, 24);
+  //size(1920, 14);
   pg = createGraphics(5568, 48);
   pg.beginDraw();
   pg.background(0);
@@ -173,7 +173,7 @@ void draw() {
   
   
   if(export) {
-    pg.save("exports/191023/"+ exportCounter +".tga"); //saveFrame("export/###.tga");
+    pg.save("exports/191023_/"+ exportCounter +".tga"); //saveFrame("export/###.tga");
     exportCounter++;
   }
   
