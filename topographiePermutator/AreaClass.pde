@@ -83,6 +83,10 @@ class Area {
     println("=> " + files_en[cycle]);
     mov_de = new Movie(pa, "assets/"+ files_de[cycle]);
     mov_en = new Movie(pa, "assets/"+ files_en[cycle]);
+    mov_de.play();
+    mov_en.play();
+    mov_de.jump(0);
+    mov_en.jump(0);
     mov_de.stop();
     mov_en.stop();
     
