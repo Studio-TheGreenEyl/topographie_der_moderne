@@ -25,11 +25,14 @@ long lastMillis = 0;
 
 // EXPORT
 boolean export = true;
+boolean showImage = true;
 long exportCounter = 0;
 
+float dot_positions[] = {552, 1668, 2782, 3895, 5008};
+
 void setup() {
-  //size(3200, 24);
-  size(1920, 14);
+  size(3200, 24);
+  //size(1920, 14);
   pg = createGraphics(5568, 48);
   pg.beginDraw();
   pg.background(0);
@@ -101,11 +104,11 @@ void draw() {
   }
     
   pg.endDraw();
- // image(pg, 0, 0, width, height);
+  if(showImage) image(pg, 0, 0, width, height);
   
   
   if(export) {
-    pg.save("exports/191024/"+ exportCounter +".tga"); //saveFrame("export/###.tga");
+    pg.save("exports/"+ year() + month() + day() +"/"+ exportCounter +".tga"); //saveFrame("export/###.tga");
     exportCounter++;
   }
   

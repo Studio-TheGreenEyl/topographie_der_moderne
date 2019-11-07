@@ -9,6 +9,7 @@ class Area {
     */
   Movie mov_de;
   Movie mov_en;
+  Movie dot;
   PApplet pa;
   int id;
   int cycle = 0;
@@ -18,12 +19,22 @@ class Area {
   int[] wiggle_de = {0, 0, 0};
   int[] wiggle_en = {0, 0, 0};
   
+  int[] width_de = {0, 0, 0};
+  int[] width_en = {0, 0, 0};
+  
   boolean pause = true;
   boolean isFinished = false;
   boolean advancable = false;
+  boolean showDot = false;
+  
+  long dotTimer = 0;
+  long dotDelay = 500;
+  float dotAlpha = 0.0;
   
   PVector pos;
   int c1 = int(random(255));
+  
+  float scale = 1.0;
   
   
   long randomStartDelay = (int)random(randomMin, randomMax);
@@ -34,15 +45,44 @@ class Area {
     id = _id;
     pos = new PVector(_x, _y);
     time = millis();
+    
+    dot = new Movie(pa, "assets/dot.mp4");
+    dot.play();
+    dot.jump(0);
+    dot.stop();
   }
   
   void display() {
     pg.imageMode(CORNER);
     pg.push();
+    pg.image(dot, dot_positions[id], 0);
     pg.translate(pos.x, pos.y);
     
-    pg.image(mov_de, 0+wiggle_de[cycle], 0);
-    pg.image(mov_en, 556+wiggle_en[cycle], 0);
+    /*
+    if(showDot) {
+      if(dotAlpha <= 1.0) dotAlpha += 0.1;
+      pg.push();
+      pg.fill(255, map(dotAlpha, 0.0, 1.0, 0, 255));
+      pg.circle(556, pg.height/2, 16);
+      pg.pop();
+    } else if(!showDot && dotAlpha > 0) {
+      if(dotAlpha > 0.0) dotAlpha -= 0.05;
+      pg.push();
+      pg.fill(255, map(dotAlpha, 0.0, 1.0, 0, 255));
+      pg.circle(556, pg.height/2, 16);
+      pg.pop();
+    }
+    */
+    
+    // mit wiggle
+    //pg.image(mov_de, 0+wiggle_de[cycle], 0);
+    //pg.image(mov_en, 556+wiggle_en[cycle], 0);
+    
+    // ohne wiggle
+    pg.image(mov_de, (556-width_de[cycle])/2, 0);
+    
+    pg.image(mov_en, 556 + ( (556-width_en[cycle])/2 ), 0);
+    
     /*
     push();
     fill(255);
@@ -61,10 +101,7 @@ class Area {
       //println("unpaused");
       }
     }
-    
     if(!pause) checkFinished();
-    
-    
   }
   
   void setAssets(int _asset, String _lang, String _fn, int _w) {
@@ -85,10 +122,13 @@ class Area {
     mov_en = new Movie(pa, "assets/"+ files_en[cycle]);
     mov_de.play();
     mov_en.play();
+    dot.play();
     mov_de.jump(0);
     mov_en.jump(0);
+    dot.jump(0);
     mov_de.stop();
     mov_en.stop();
+    dot.stop();
     
   }
   
@@ -110,6 +150,7 @@ class Area {
     
     if( (currentTime_de >= totalTime_de && currentTime_en >= totalTime_en) || (int(currentTime_de) >= int(totalTime_de) && int(currentTime_en) >= int(totalTime_en))) {
       isFinished = true;
+      showDot = false;
       advancable = false;
     }
     
@@ -118,12 +159,20 @@ class Area {
   void startMovies() {
     if(mov_de != null) {
       mov_de.play();
-      if(mov_de.width != 0) wiggle_de[cycle] = 556-int(random(mov_de.width, 556));
+      if(mov_de.width != 0) {
+        wiggle_de[cycle] = 556-int(random(mov_de.width, 556));
+        width_de[cycle] = mov_de.width;
+      }
     }
     if(mov_en != null) {
       mov_en.play();
-      if(mov_en.width != 0) wiggle_en[cycle] = 556-int(random(mov_en.width, 556));
+      if(mov_en.width != 0) {
+        wiggle_en[cycle] = 556-int(random(mov_en.width, 556));
+        width_en[cycle] = mov_en.width;
+      }
     }
+    if(dot != null) dot.play();
+    showDot = true;
   }
   
   
