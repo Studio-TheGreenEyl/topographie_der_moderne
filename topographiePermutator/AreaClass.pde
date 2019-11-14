@@ -22,6 +22,9 @@ class Area {
   int[] width_de = {0, 0, 0};
   int[] width_en = {0, 0, 0};
   
+  int[] height_de = {0, 0, 0};
+  int[] height_en = {0, 0, 0};
+  
   boolean pause = true;
   boolean isFinished = false;
   boolean advancable = false;
@@ -53,10 +56,30 @@ class Area {
   }
   
   void display() {
-    pg.imageMode(CORNER);
+    pg.imageMode(CENTER);
+    pg.rectMode(CENTER);
     pg.push();
-    pg.image(dot, dot_positions[id], 0);
-    pg.translate(pos.x, pos.y);
+    
+    //pg.pushStyle();
+    pg.noFill();
+    //pg.stroke(255);
+    //pg.strokeWeight(3);
+    //pg.translate(pos.x, pos.y);
+    if(drawDot) pg.image(dot, dot_positions[id], 24);
+    //pg.rect(dot_positions[id], 24, 30, 48);
+    //pg.popStyle();
+    
+    float pointLeft = 0;
+    float pointMiddle = dot_positions[id];
+    float pointRight = 1113;
+    /*
+    float positionDE = pointMiddle / 2;
+    float positionEN = (pointMiddle / 2) * 3;
+    */
+    float positionDE = pointMiddle - radiusAroundDot;
+    float positionEN = pointMiddle + radiusAroundDot;
+    
+    
     
     /*
     if(showDot) {
@@ -79,9 +102,39 @@ class Area {
     //pg.image(mov_en, 556+wiggle_en[cycle], 0);
     
     // ohne wiggle
-    pg.image(mov_de, (556-width_de[cycle])/2, 0);
+    //pg.image(mov_de, (556-width_de[cycle])/2, 0);
+    //pg.image(mov_en, 556 + ( (556-width_en[cycle])/2 ), 0);
     
-    pg.image(mov_en, 556 + ( (556-width_en[cycle])/2 ), 0);
+    // ohne wiggle und zentriert mit hilfe von dot_position
+    pg.push();
+    pg.imageMode(CORNER);
+    pg.image(mov_de, positionDE - width_de[cycle], 0);
+    pg.image(mov_en, positionEN, 0);
+    
+    
+    
+    pg.stroke(255, 0, 0);
+    //pg.rect(positionDE - width_de[cycle], 0, width_de[cycle], height_de[cycle]-2);
+    //pg.rect(positionEN, 0, width_en[cycle], height_en[cycle]-2);
+    pg.pop();
+    
+    /*
+    pg.stroke(255);
+    pg.line(positionDE, 0, positionDE, 48);
+    pg.line(positionEN, 0, positionEN, 48);
+    
+    pg.stroke(0, 255, 255);
+    pg.line(0, 0, 0, 48);
+    pg.stroke(255, 255, 0);
+    pg.line(556*2, 0, 556*2, 48);
+    */
+    
+    
+    
+    
+    //pg.fill(255, 0, 255);
+    //pg.circle( (pointMiddle - pointLeft) / 2, 24, 5);
+    //pg.circle( (pointRight - pointMiddle) / 2, 24, 5);
     
     /*
     push();
@@ -162,6 +215,7 @@ class Area {
       if(mov_de.width != 0) {
         wiggle_de[cycle] = 556-int(random(mov_de.width, 556));
         width_de[cycle] = mov_de.width;
+        height_de[cycle] = mov_de.height;
       }
     }
     if(mov_en != null) {
@@ -169,6 +223,7 @@ class Area {
       if(mov_en.width != 0) {
         wiggle_en[cycle] = 556-int(random(mov_en.width, 556));
         width_en[cycle] = mov_en.width;
+        height_en[cycle] = mov_en.height;
       }
     }
     if(dot != null) dot.play();

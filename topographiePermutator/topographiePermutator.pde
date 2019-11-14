@@ -26,9 +26,27 @@ long lastMillis = 0;
 // EXPORT
 boolean export = true;
 boolean showImage = true;
+boolean drawDot = true;
 long exportCounter = 0;
 
-float dot_positions[] = {552, 1668, 2782, 3895, 5008};
+//float dot_positions[] = {552, 1668, 2782, 3895, 5008};
+//float dot_positions[] = {552, 552+12, 552+22, 552+31, 552+40};
+
+
+// # # # # # # # # # # # # # # # # # #
+  // gesamtpixel= 5568 | bereiche= 5 | 5568/5 = 1113,6f
+  // 1113 / 2 = 556 (mittelpunkt eines bereiches)
+  // 556 + offset (könnte man noch vereinfachen und nur die offsets darstellen
+
+//float dot_positions[] = {556, 556+12, 556+22, 556+31, 556+40};
+float dot_positions[] = {528, 1653, 2778, 3903, 5028};
+int radiusAroundDot = 120; // pixelradius der um den "dot" freigehalten wird
+
+
+// ACHTUNG!
+// Post-Export Vorgehen:
+// – Frames zu Quicktime *.mov rendern (Apple Pro Res 422 LT)
+// – H264 kommt nur bis 4096 irgendwas Pixel in der Breite
 
 void setup() {
   size(3200, 24);
